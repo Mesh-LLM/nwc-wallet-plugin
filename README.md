@@ -10,21 +10,32 @@ only needs the connection URI.
 
 ## Install
 
-No release is published yet. Once one is:
+A wallet does nothing on its own: paid inference comes from the
+[`pay-lightning`](https://github.com/Mesh-LLM/ln-payments-plugin) plugin, which
+reaches this wallet through the host. Install both together (mesh-llm `main` at
+`b63cea23c` or later, or the first release after v0.78.0):
 
 ```sh
-mesh-llm plugins install Mesh-LLM/nwc-wallet
+mesh-llm plugins install Mesh-LLM/nwc-wallet-plugin Mesh-LLM/ln-payments-plugin
 ```
 
-Until then, build an archive (see Development) and install it with:
+To install a local build instead, build an archive (see Development) and run:
 
 ```sh
 mesh-llm plugins install --name nwc-wallet --version 0.1.0 --archive dist/nwc-wallet-v0.1.0-<target>.tar.gz
 ```
 
-Use a mesh-llm build with payments enabled. If another wallet plugin is also
-installed, choose this one in `config.toml` with `[payments] wallet =
-"nwc-wallet"`.
+If another wallet plugin (for example `lexe-wallet`) is also running, name this
+one in `pay-lightning`'s binding in `config.toml`:
+
+```toml
+[[plugin]]
+name = "pay-lightning"
+
+[[plugin.operation_bindings]]
+name = "wallet"
+provider = "nwc-wallet"
+```
 
 ## Configure
 
